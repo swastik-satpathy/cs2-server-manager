@@ -1,0 +1,23 @@
+{
+  "retakes": {
+    "repo": "https://github.com/B3none/cs2-retakes"
+  },
+  "allocator": {
+    "repo": "https://github.com/yonilerner/cs2-retakes-allocator"
+  },
+  "instaplant": {
+    "repo": "https://github.com/B3none/cs2-instaplant"
+  },
+  "instadefuse": {
+    "repo": "https://github.com/B3none/cs2-instadefuse"
+  },
+  "rtv": {
+    "repo": "https://github.com/Oz-Lin/cs2-rockthevote"
+  },
+  "clutchannounce": {
+    "repo": "https://github.com/B3none/cs2-clutch-announce"
+  },
+  "simpleadmin": {
+    "repo": "https://github.com/daffyyyy/CS2-SimpleAdmin"
+  }
+}
