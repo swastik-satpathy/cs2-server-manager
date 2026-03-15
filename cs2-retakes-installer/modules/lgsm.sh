@@ -1,3 +1,11 @@
+
+LGSM_BIN="/home/cs2server/cs2server"
+
+if [ -f "$LGSM_BIN" ]; then
+    echo "LGSM already installed — skipping"
+    return
+fi
+
 echo "Installing LGSM..."
 
 sudo -u cs2server bash << 'EOF'
