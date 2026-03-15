@@ -11,5 +11,4 @@ apt install -y \
   unzip \
   screen \
   lib32gcc-s1 \
-  lib32stdc++6 \
-  steamcmd
+  lib32stdc++6
