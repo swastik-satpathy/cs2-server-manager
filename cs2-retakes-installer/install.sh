@@ -52,6 +52,8 @@ if ! id "cs2server" &>/dev/null; then
   useradd -m cs2server
 fi
 
+su - cs2server
+
 source modules/dependencies.sh
 source modules/lgsm.sh
 source modules/metamod.sh
