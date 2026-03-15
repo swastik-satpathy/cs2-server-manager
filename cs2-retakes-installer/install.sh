@@ -20,14 +20,14 @@ source cli.sh
 # Detect existing installation
 ########################################
 
-if id "cs2server" &>/dev/null; then
-  echo "Existing install detected"
-  read -rp "Repair existing install? (y/n): " repair
-fi
+INSTALL_STATE="fresh"
 
-if [ -d "/home/cs2server/serverfiles" ]; then
+if id "cs2server" &>/dev/null && [ -d "/home/cs2server/serverfiles" ]; then
+    INSTALL_STATE="existing"
+
     echo "Existing CS2 installation detected."
-    read -rp "Repair installation? (y/n): " repair
+
+    read -rp "Repair / continue installation? (y/n): " repair
 
     if [[ "${repair:-n}" != "y" ]]; then
         echo "Aborting install."
@@ -75,7 +75,7 @@ run_module modules/database.sh
 run_module modules/plugins.sh
 run_module modules/admin.sh
 run_module modules/cron.sh
-#run_module modules/updater.sh
+
 
 ########################################
 # Patch gameinfo.gi for Metamod
