@@ -1,33 +1,69 @@
 #!/bin/bash
 
-echo "==== CS2 Retakes Server Installer ===="
+ENV_FILE=".env"
 
-read -p "Steam GSLT Token: " GSLT
-read -p "Server Name: " SERVER_NAME
-read -p "Server Tags (comma separated): " SERVER_TAGS
-read -p "Server Owner SteamID: " OWNER_STEAMID
-read -p "Admin SteamIDs (comma separated): " ADMINS
-read -p "Discord Webhook URL (optional): " WEBHOOK
+# Load env if exists
+if [ -f "$ENV_FILE" ]; then
+    echo "Loading configuration from .env"
+    set -a
+    source "$ENV_FILE"
+    set +a
+fi
 
-echo ""
-echo "Select plugins to install:"
+ask_if_empty() {
+    VAR=$1
+    QUESTION=$2
 
-declare -A PLUGINS
+    if [ -z "${!VAR:-}" ]; then
+        read -rp "$QUESTION: " VALUE
+        export $VAR="$VALUE"
+    fi
+}
 
-PLUGINS[retakes]=0
-PLUGINS[allocator]=0
-PLUGINS[instaplant]=0
-PLUGINS[instadefuse]=0
-PLUGINS[rtv]=0
-PLUGINS[clutchannounce]=0
-PLUGINS[simpleadmin]=0
+ask_if_empty GSLT "Steam GSLT Token"
+ask_if_empty SERVER_NAME "Server Name"
+ask_if_empty SERVER_TAGS "Server Tags"
+ask_if_empty OWNER_STEAMID "Owner SteamID"
+ask_if_empty ADMINS "Admin SteamIDs (comma separated)"
+ask_if_empty WEBHOOK "Discord Webhook URL (optional)"
 
-for plugin in "${!PLUGINS[@]}"; do
-  read -p "Install $plugin? (y/n): " answer
-  if [[ $answer == "y" ]]; then
-    PLUGINS[$plugin]=1
-  fi
-done
+# Plugin handling
+if [ -z "${PLUGINS:-}" ]; then
 
-export GSLT SERVER_NAME SERVER_TAGS OWNER_STEAMID ADMINS WEBHOOK
-export SELECTED_PLUGINS=$(printf "%s\n" "${!PLUGINS[@]}" | while read p; do [ "${PLUGINS[$p]}" -eq 1 ] && echo "$p"; done | paste -sd "," -)
+    echo ""
+    echo "Select plugins to install:"
+    echo ""
+
+    declare -A PLUGINS_MAP=(
+        [retakes]=0
+        [allocator]=0
+        [instaplant]=0
+        [instadefuse]=0
+        [rtv]=0
+        [clutchannounce]=0
+        [simpleadmin]=0
+    )
+
+    for plugin in "${!PLUGINS_MAP[@]}"; do
+        read -rp "Install $plugin? (y/n): " answer
+
+        if [[ "$answer" =~ ^[Yy]$ ]]; then
+            PLUGINS_MAP[$plugin]=1
+        fi
+    done
+
+    SELECTED_PLUGINS=$(
+        for plugin in "${!PLUGINS_MAP[@]}"; do
+            if [ "${PLUGINS_MAP[$plugin]}" -eq 1 ]; then
+                echo -n "$plugin,"
+            fi
+        done
+    )
+
+    SELECTED_PLUGINS=${SELECTED_PLUGINS%,}
+
+else
+    SELECTED_PLUGINS="$PLUGINS"
+fi
+
+export SELECTED_PLUGINS
