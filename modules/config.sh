@@ -1,31 +1,30 @@
 #!/bin/bash
 
-echo "Configuring server files..."
+echo "Updating cs2server.cfg settings..."
 
 CFG_DIR="/home/cs2server/serverfiles/game/csgo/cfg"
 CS2SERVER_CFG="$CFG_DIR/cs2server.cfg"
-TEMPLATE_CFG="/home/cs2server/cs2-retakes/templates/cs2server.cfg"
 MAPCYCLE="/home/cs2server/serverfiles/game/csgo/mapcycle.txt"
 
 mkdir -p "$CFG_DIR"
 
 ########################################
-# cs2server.cfg from template
+# Update hostname and maxplayers
 ########################################
 
-if [ ! -f "$CS2SERVER_CFG" ]; then
-    echo "Copying template to cs2server.cfg"
-    cp "$TEMPLATE_CFG" "$CS2SERVER_CFG"
+# Update hostname to SERVER_NAME if set, otherwise default
+if [ -n "$SERVER_NAME" ]; then
+    sed -i "s/^hostname .*/hostname \"$SERVER_NAME\"/" "$CS2SERVER_CFG"
 else
-    echo "cs2server.cfg already exists. Skipping."
+    sed -i "s/^hostname .*/hostname \"LinuxGSM\"/" "$CS2SERVER_CFG"
 fi
 
-########################################
-# Replace template placeholders
-########################################
-
-sed -i "s/{{SERVER_NAME}}/$SERVER_NAME/g" "$CS2SERVER_CFG"
-sed -i "s/{{SERVER_TAGS}}/$SERVER_TAGS/g" "$CS2SERVER_CFG"
+# Update maxplayers to 10, add line if missing
+if grep -q "^maxplayers" "$CS2SERVER_CFG"; then
+    sed -i "s/^maxplayers .*/maxplayers 10/" "$CS2SERVER_CFG"
+else
+    echo "maxplayers 10" >> "$CS2SERVER_CFG"
+fi
 
 ########################################
 # mapcycle.txt
@@ -53,4 +52,4 @@ fi
 
 chown cs2server:cs2server "$CS2SERVER_CFG" "$MAPCYCLE"
 
-echo "Server configuration complete."
+echo "cs2server.cfg updated successfully."
