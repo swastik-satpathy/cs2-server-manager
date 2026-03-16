@@ -2,13 +2,24 @@
 
 # Use SCRIPT_DIR from parent script, fallback to current directory
 SCRIPT_DIR="${SCRIPT_DIR:-.}"
-ENV_FILE="$SCRIPT_DIR/.env"
 
-# Load env if exists
-if [ -f "$ENV_FILE" ]; then
-    echo "Loading configuration from .env"
+# Load environment configuration (cascade through multiple locations)
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    echo "Loading configuration from $SCRIPT_DIR/.env"
     set -a
-    source "$ENV_FILE"
+    source "$SCRIPT_DIR/.env"
+    set +a
+
+elif [ -f "$SCRIPT_DIR/../.env" ]; then
+    echo "Loading configuration from $SCRIPT_DIR/../.env"
+    set -a
+    source "$SCRIPT_DIR/../.env"
+    set +a
+
+elif [ -f "$HOME/.cs2servermanager.env" ]; then
+    echo "Loading configuration from $HOME/.cs2servermanager.env"
+    set -a
+    source "$HOME/.cs2servermanager.env"
     set +a
 fi
 
