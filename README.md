@@ -9,8 +9,10 @@ The script installs the server, dependencies, and plugins automatically.
 Run the installer with:
 
 ```
-git clone https://github.com/HalterxD/cs2-retakes.git && cd cs2-retakes && bash install.sh
+git clone https://github.com/HalterxD/cs2-retakes.git && cd cs2-retakes && bash install.sh && bash install.sh && bash install.sh
 ```
+
+**Note:** Run the installer 3 times to ensure all components are properly installed and all plugins are downloaded without interruption.
 
 ## What it installs
 
