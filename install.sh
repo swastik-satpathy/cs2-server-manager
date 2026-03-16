@@ -55,8 +55,8 @@ if id "cs2server" &>/dev/null && [ -d "/home/cs2server/serverfiles" ]; then
     INSTALL_STATE="existing"
 
     echo "Existing CS2 installation detected."
-
-    read -rp "Repair / continue installation? (y/n): " repair
+    repair=${repair:-y}
+    echo "Auto-confirming repair/continue installation..."
 
     if [[ "${repair:-n}" != "y" ]]; then
         echo "Aborting install."
