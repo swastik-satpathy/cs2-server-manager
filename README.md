@@ -9,7 +9,7 @@ The script installs the server, dependencies, and plugins automatically.
 Run the installer with:
 
 ```
-git clone https://github.com/swastik-satpathy/cs2-retakes.git && cd cs2-retakes && bash install.sh
+git clone https://github.com/HalterxD/cs2-retakes.git && cd cs2-retakes && bash install.sh
 ```
 
 ## What it installs
